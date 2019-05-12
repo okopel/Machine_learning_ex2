@@ -1,11 +1,18 @@
+"""
+Ori Kopel 205533151 kopelor
+Shlomo Rabinovich 308432517 rabinos
+"""
 import sys
 
 import numpy as np
 from scipy import stats
 
+import Passive_Aggressive
 import perceptron
+import svm
 
 
+# todo!
 def Z_normalize(arrOfParams):
     # return (arrOfParams - np.mean) / np.std(np.divide())
     print("norm\n")
@@ -45,7 +52,7 @@ def one_hot(arrOfData, arrOfTypes):
 
 
 def main():
-    # the parameter
+    # get the parameter from CMD
     if len(sys.argv) != 4:
         print("ERROR!!")
         return
@@ -56,11 +63,34 @@ def main():
     # convert the first col to one hot (00..00100..) at the class place
     X = one_hot(X, ['M', 'F', 'I'])
     # X = Z_normalize(X)
-    # normalize al the args to args between 0 to 1
+    # normalize all the args to args between 0 to 1
     X = MinMax_normalize(X)
-    print(X)
     # print(X, Y)
-    perceptron.perceptron(X, Y)
+    perceptronVec = perceptron.perceptron(X, Y)
+    svmVec = svm.svm(X, Y)
+    paVec = Passive_Aggressive.pa(X, Y)
+    printTest([perceptronVec, svmVec, paVec], ["perceptron", "svn", "pa"], X, Y)
+
+
+def printTest(wArr, nameArr, X, Y):
+    res = np.array(len(X), len(wArr))
+    for i in range(len(X)):
+        for w in range(len(wArr)):
+            res[i][w] = testing(wArr[w], X, Y)
+    print(res)
+
+
+def testing(w, X_train, Y_train):
+    m = 0
+    n = len(X_train)
+    # check all the training set after our training
+    for t in range(0, n):
+        vec = np.array(X_train[t]).astype(np.float64)
+        y_hat = np.argmin(np.dot(w, vec))
+        if Y_train[t] != y_hat:
+            # error++
+            m += 1
+    return float(m) / n
 
 
 main()

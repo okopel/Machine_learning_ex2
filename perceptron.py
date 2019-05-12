@@ -1,3 +1,8 @@
+"""
+Ori Kopel 205533151 kopelor
+Shlomo Rabinovich 308432517 rabinos
+"""
+
 import numpy as np
 from sklearn.utils import shuffle
 
@@ -19,7 +24,6 @@ def perceptron(X_train: np, Y_train: np) -> object:
     for e in range(epochs):
         # take one random example from the training set
         X_train, Y_train = shuffle(X_train, Y_train)
-
         # x= out example while y is the class
     for x, y in zip(X_train, Y_train):
         x = x.astype(np.float)
@@ -37,19 +41,4 @@ def perceptron(X_train: np, Y_train: np) -> object:
             # make the true hypnotize closer to us
             # w[y_hat, :] -= eta * x
             w[int(y_hat)] -= etax
-    testing(w, X_train, Y_train)
-
-
-def testing(w_perceptron, X_train, Y_train):
-    m_perceptron = 0
-    m = len(X_train)
-    # check all the training set after our training
-    for t in range(0, m):
-        vec = np.array(X_train[t]).astype(np.float64)
-        print(vec)
-        # y_hat = np.sign(np.dot(w_perceptron, X_train[t]))
-        y_hat = np.argmin(np.dot(w_perceptron, vec))
-        if Y_train[t] != y_hat:
-            # error++
-            m_perceptron += 1
-    print("perceptron err =", float(m_perceptron) / m)
+    return w
