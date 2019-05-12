@@ -30,7 +30,9 @@ def one_hot(arrOfData, arrOfTypes):
     for i in range(len(arrOfData)):
         for j in range(len(arrOfTypes)):
             if arrOfData[i][colToAdd] == arrOfTypes[j]:
+                # delete the original sign
                 arrOfData[i][colToAdd] = float(0)
+                # light the true bit
                 arrOfData[i][j] = float(1)
     return arrOfData
 
