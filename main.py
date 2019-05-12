@@ -1,3 +1,5 @@
+import sys
+
 import numpy as np
 from scipy import stats
 
@@ -37,9 +39,9 @@ def one_hot(arrOfData, arrOfTypes):
     return arrOfData
 
 
-# if __name__ == '__main__':
 def main():
-    # todo argv[0]
+    # the parameter
+    print(sys.argv[1])
     # read the training set
     Y = np.genfromtxt("train_y.txt", delimiter=",")
     X = np.genfromtxt("train_x.txt", delimiter=',', dtype="|U5")
