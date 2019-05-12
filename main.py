@@ -49,8 +49,8 @@ def main():
         return
 
     # read the training set
-    Y = np.genfromtxt("train_y.txt", delimiter=",")
-    X = np.genfromtxt("train_x.txt", delimiter=',', dtype="|U5")
+    Y = np.genfromtxt(sys.argv[2], delimiter=",")
+    X = np.genfromtxt(sys.argv[1], delimiter=',', dtype="|U5")
     # convert the first col to one hot (00..00100..) at the class place
     X = one_hot(X, ['M', 'F', 'I'])
     # X = Z_normalize(X)
