@@ -22,19 +22,32 @@ def MinMax_normalize(arrOfParams):
         return arrOfParams
 
 
+def one_hot(arrOfData, arrOfTypes):
+    colToAdd = len(arrOfTypes) - 1
+    # adding col of zeros
+    for i in range(colToAdd):
+        arrOfData = np.c_[np.zeros(len(arrOfData)), arrOfData]
+    for i in range(len(arrOfData)):
+        for j in range(len(arrOfTypes)):
+            if arrOfData[i][colToAdd] == arrOfTypes[j]:
+                arrOfData[i][colToAdd] = float(0)
+                arrOfData[i][j] = float(1)
+    return arrOfData
+
+
 # if __name__ == '__main__':
 def main():
     # todo argv[0]
     # read the training set
-    X = np.genfromtxt("train_x.txt", delimiter=',', dtype="|U5")
-    X[X == 'M'] = 0
-    X[X == 'F'] = 1
-    X[X == 'I'] = 2
     Y = np.genfromtxt("train_y.txt", delimiter=",")
-    print(X, Y)
+    X = np.genfromtxt("train_x.txt", delimiter=',', dtype="|U5")
+    # convert the first col to one hot (00..00100..) at the class place
+    X = one_hot(X, ['M', 'F', 'I'])
     # X = Z_normalize(X)
+    # normalize al the args to args between 0 to 1
     X = MinMax_normalize(X)
-    print(X, Y)
+    print(X)
+    # print(X, Y)
     # perceptron(X, Y)
 
 
