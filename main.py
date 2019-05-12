@@ -24,6 +24,9 @@ def MinMax_normalize(arrOfParams):
         return arrOfParams
 
 
+# take one box with char/type args and seperete it to bits
+# when the index of this char in arrOfype is 1 and the other is 0
+# notice that the original box has to be in the 1st col
 def one_hot(arrOfData, arrOfTypes):
     colToAdd = len(arrOfTypes) - 1
     # adding col of zeros
@@ -41,7 +44,10 @@ def one_hot(arrOfData, arrOfTypes):
 
 def main():
     # the parameter
-    print(sys.argv[1])
+    if len(sys.argv) != 4:
+        print("ERROR!!")
+        return
+
     # read the training set
     Y = np.genfromtxt("train_y.txt", delimiter=",")
     X = np.genfromtxt("train_x.txt", delimiter=',', dtype="|U5")
