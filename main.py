@@ -3,6 +3,8 @@ import sys
 import numpy as np
 from scipy import stats
 
+import perceptron
+
 
 def Z_normalize(arrOfParams):
     # return (arrOfParams - np.mean) / np.std(np.divide())
@@ -58,7 +60,7 @@ def main():
     X = MinMax_normalize(X)
     print(X)
     # print(X, Y)
-    # perceptron(X, Y)
+    perceptron.perceptron(X, Y)
 
 
 main()
