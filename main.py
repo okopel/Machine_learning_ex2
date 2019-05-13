@@ -7,9 +7,7 @@ import sys
 import numpy as np
 from scipy import stats
 
-import Passive_Aggressive
 import perceptron
-import svm
 
 
 # todo!
@@ -53,23 +51,28 @@ def one_hot(arrOfData, arrOfTypes):
 
 def main():
     # get the parameter from CMD
-    if len(sys.argv) != 4:
+    if len(sys.argv) < 4:
         print("ERROR!!")
         return
 
     # read the training set
-    Y = np.genfromtxt(sys.argv[2], delimiter=",")
     X = np.genfromtxt(sys.argv[1], delimiter=',', dtype="|U5")
+    Y = np.genfromtxt(sys.argv[2], delimiter=",")
+    x_test = np.genfromtxt(sys.argv[3], delimiter=",", dtype="|U5")
+    y_test = np.genfromtxt(sys.argv[4], delimiter=',')
     # convert the first col to one hot (00..00100..) at the class place
     X = one_hot(X, ['M', 'F', 'I'])
+    x_test = one_hot(x_test, ['M', 'F', 'I'])
     # X = Z_normalize(X)
     # normalize all the args to args between 0 to 1
     X = MinMax_normalize(X)
+    x_test = MinMax_normalize(x_test)
     X, Y = perceptron.shuffle2np(X, Y)
     perceptronVec = perceptron.perceptron(X, Y)
-    svmVec = svm.svm(X, Y)
-    paVec = Passive_Aggressive.pa(X, Y)
-    printTest([perceptronVec, svmVec, paVec], ["perceptron", "svn", "pa"], X, Y)
+    # svmVec = svm.svm(X, Y)
+    # paVec = Passive_Aggressive.pa(X, Y)
+    # printTest([perceptronVec, svmVec, paVec], ["perceptron", "svn", "pa"], X, Y)
+    print("suc:", testing(perceptronVec, x_test, y_test))
 
 
 def printTest(wArr, nameArr, X, Y):
@@ -86,11 +89,10 @@ def testing(w, X_train, Y_train):
     # check all the training set after our training
     for t in range(0, n):
         vec = np.array(X_train[t]).astype(np.float64)
-        y_hat = np.argmin(np.dot(w, vec))
-        if Y_train[t] != y_hat:
-            # error++
+        y_hat = np.argmax(np.dot(w, vec))
+        if Y_train[t] == y_hat:
             m += 1
-    return float(m) / n
+    return m / n
 
 
 main()
