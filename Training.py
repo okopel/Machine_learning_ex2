@@ -19,8 +19,8 @@ class Training:
         for e in range(self.epochs):
             self.t_data, self.t_label = shuffle2np(self.t_data, self.t_label)
             for x, y in zip(self.t_data, self.t_label):
-                y = int(y)
-                x = np.array(x)
+                y = int(float(y))
+                x = np.array(x).astype(float)
                 self.perceptron(x, y)
                 self.passiveAgressive(x, y)
                 self.svm(x, y)

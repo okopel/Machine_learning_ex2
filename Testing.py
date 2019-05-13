@@ -17,7 +17,7 @@ class Testing:
     def test(self):
         t1 = t2 = t3 = 0
         for t in range(self.data_count):
-            vec = np.array(self.test_data[t])
+            vec = np.array(self.test_data[t]).astype(float)
             t1 += self.testPerceptrom(self.test_label[t], vec)
             t2 += self.testPA(self.test_label[t], vec)
             t3 += self.testSVM(self.test_label[t], vec)
