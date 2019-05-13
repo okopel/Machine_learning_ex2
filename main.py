@@ -20,7 +20,11 @@ def main():
     test_label = sys.argv[4]
     tool = Utiles.Utiles(data_t, data_label, test_data, test_label)
     data_train, data_label, test_data, test_label = tool.orderData()
-    trainer = Training.Training(data_train, data_label, 3, 0.2, 0.25, 50)
+    clssesNum = 3
+    lamda = 0.2
+    eta = 0.25
+    epochs = 10
+    trainer = Training.Training(data_train, data_label, clssesNum, lamda, eta, epochs)
     w_per, w_pa, w_svm = trainer.train()
     tester = Testing.Testing(test_data, test_label, w_per, w_pa, w_svm)
     t1, t2, t3 = tester.test()
