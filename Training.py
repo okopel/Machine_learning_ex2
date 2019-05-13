@@ -12,7 +12,7 @@ class Training:
         self.t_label = t_label  # label of training set
         self.lamda = lamda
         self.eta = eta
-        self.epochs = epochs  # how many iterats
+        self.epochs = epochs  # how many iterates
         self.w_perceptron = np.zeros((clssesNum, len(t_data[0])))
         self.w_pa = np.zeros((clssesNum, len(t_data[0])))
         self.w_svm = np.zeros((clssesNum, len(t_data[0])))

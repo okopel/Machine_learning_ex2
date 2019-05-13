@@ -6,7 +6,7 @@ import numpy as np
 from scipy import stats
 
 
-class Utiles:
+class Utils:
     def __init__(self, data_t, data_label, test_data, test_label):
         self.data_train = data_t
         self.data_label = data_label
@@ -28,10 +28,12 @@ class Utiles:
         return self.data_train, self.data_label, self.test_data, self.test_label
 
     # todo!
-    def Z_normalize(self, arrOfParams):
+    @staticmethod
+    def Z_normalize(arrOfParams):
         return stats.zscore(arrOfParams)
 
-    def MinMax_normalize(self, arrOfParams):
+    @staticmethod
+    def MinMax_normalize(arrOfParams):
         # (x-min)/(max-min)
         for i in range(len(arrOfParams[0])):
             minArg = float(min(arrOfParams[:, i]))
@@ -39,14 +41,14 @@ class Utiles:
             if minArg == maxArg:  # todo
                 return 1
             for j in range(len(arrOfParams)):
-                old = arrOfParams[j, i]
                 arrOfParams[j, i] = (float(arrOfParams[j, i]) - minArg) / (maxArg - minArg)
             return arrOfParams
 
-    # take one box with char/type args and seperete it to bits
-    # when the index of this char in arrOfype is 1 and the other is 0
+    # take one box with char/type args and separate it to bits
+    # when the index of this char in arrOfypes is 1 and the other is 0
     # notice that the original box has to be in the 1st col
-    def one_hot(self, arrOfData, arrOfTypes):
+    @staticmethod
+    def one_hot(arrOfData, arrOfTypes):
         colToAdd = len(arrOfTypes) - 1
         # adding col of zeros
         for i in range(colToAdd):
