@@ -1,6 +1,6 @@
 """
 Ori Kopel 205533151 kopelor
-Shlomo Rabinovich 308432517 rabinos
+Shlomo Rabinovich 308432517 rabinos6
 """
 
 import numpy as np
@@ -11,11 +11,8 @@ class Training:
         self.t_data = t_data  # data of training set
         self.t_label = t_label  # label of training set
         self.lamda = lamda
-        # self.n = len(t_data)  # set size
-        # self.m = len(t_data[0])  # parameters of one entry
         self.eta = eta
         self.epochs = epochs  # how many iterats
-        # self.classesNum = clssesNum  # how many multy class
         self.w_perceptron = self.w_pa = self.w_svm = np.zeros((clssesNum, len(t_data[0])))
 
     def train(self):

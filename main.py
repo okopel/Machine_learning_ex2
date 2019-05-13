@@ -1,20 +1,53 @@
 """
 Ori Kopel 205533151 kopelor
-Shlomo Rabinovich 308432517 rabinos
+Shlomo Rabinovich 308432517 rabinos6
 """
 import sys
 
 import numpy as np
 from scipy import stats
 
-import perceptron
+import Testing
+import Training
+
+
+def main():
+    # get the parameter from CMD
+    if len(sys.argv) < 4:
+        print("ERROR!!")
+        return
+    data_t = sys.argv[1]
+    data_label = sys.argv[2]
+    test_data = sys.argv[3]
+    test_label = sys.argv[4]
+    data_train, data_label, test_train, test_label = orderDate(data_t, data_label, test_data, test_label)
+    trainer = Training.Training(data_t, data_label, 3, 0.2, 0.25, 50)
+    w_per, w_pa, w_svm = trainer.train()
+    tester = Testing.Testing(test_data, test_label, w_per, w_pa, w_svm)
+    t1, t2, t3 = tester.test()
+    print("per:", t1, " pa:", t2, " svm:", t3)
+
+
+main()
+
+
+def orderDate(data_train, data_label, test_train, test_label):
+    data_train = np.genfromtxt(data_train, delimiter=',', dtype="|U5")
+    data_label = np.genfromtxt(data_label, delimiter=",")
+    test_train = np.genfromtxt(test_train, delimiter=",", dtype="|U5")
+    test_label = np.genfromtxt(test_label, delimiter=',')
+
+    data_train = one_hot(data_train, ['M', 'F', 'I'])
+    test_train = one_hot(test_train, ['M', 'F', 'I'])
+
+    data_train = MinMax_normalize(data_train)
+    test_train = MinMax_normalize(test_train)
+
+    return data_train, data_label, test_train, test_label
 
 
 # todo!
 def Z_normalize(arrOfParams):
-    # return (arrOfParams - np.mean) / np.std(np.divide())
-    print("norm\n")
-    print(stats.zscore(arrOfParams))
     return stats.zscore(arrOfParams)
 
 
@@ -24,7 +57,7 @@ def MinMax_normalize(arrOfParams):
         minArg = float(min(arrOfParams[:, i]))
         maxArg = float(max(arrOfParams[:, i]))
         if minArg == maxArg:  # todo
-            return
+            return 1
         for j in range(len(arrOfParams)):
             old = arrOfParams[j, i]
             arrOfParams[j, i] = (float(arrOfParams[j, i]) - minArg) / (maxArg - minArg)
@@ -47,52 +80,3 @@ def one_hot(arrOfData, arrOfTypes):
                 # light the true bit
                 arrOfData[i][j] = float(1)
     return arrOfData
-
-
-def main():
-    # get the parameter from CMD
-    if len(sys.argv) < 4:
-        print("ERROR!!")
-        return
-
-    # read the training set
-    X = np.genfromtxt(sys.argv[1], delimiter=',', dtype="|U5")
-    Y = np.genfromtxt(sys.argv[2], delimiter=",")
-    x_test = np.genfromtxt(sys.argv[3], delimiter=",", dtype="|U5")
-    y_test = np.genfromtxt(sys.argv[4], delimiter=',')
-    # convert the first col to one hot (00..00100..) at the class place
-    X = one_hot(X, ['M', 'F', 'I'])
-    x_test = one_hot(x_test, ['M', 'F', 'I'])
-    # X = Z_normalize(X)
-    # normalize all the args to args between 0 to 1
-    X = MinMax_normalize(X)
-    x_test = MinMax_normalize(x_test)
-    X, Y = perceptron.shuffle2np(X, Y)
-    perceptronVec = perceptron.perceptron(X, Y)
-    # svmVec = svm.svm(X, Y)
-    # paVec = Passive_Aggressive.pa(X, Y)
-    # printTest([perceptronVec, svmVec, paVec], ["perceptron", "svn", "pa"], X, Y)
-    print("suc:", testing(perceptronVec, x_test, y_test))
-
-
-def printTest(wArr, nameArr, X, Y):
-    res = np.array(len(X), len(wArr))
-    for i in range(len(X)):
-        for w in range(len(wArr)):
-            res[i][w] = testing(wArr[w], X, Y)
-    print(res)
-
-
-def testing(w, X_train, Y_train):
-    m = 0
-    n = len(X_train)
-    # check all the training set after our training
-    for t in range(0, n):
-        vec = np.array(X_train[t]).astype(np.float64)
-        y_hat = np.argmax(np.dot(w, vec))
-        if Y_train[t] == y_hat:
-            m += 1
-    return m / n
-
-
-main()
