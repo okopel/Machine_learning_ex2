@@ -21,7 +21,7 @@ def main():
     tool = Utiles.Utiles(data_t, data_label, test_data, test_label)
     data_train, data_label, test_data, test_label = tool.orderData()
     clssesNum = 3
-    lamda = 0.2
+    lamda = 0.8
     eta = 0.25
     epochs = 10
     trainer = Training.Training(data_train, data_label, clssesNum, lamda, eta, epochs)

@@ -15,7 +15,9 @@ class Testing:
         self.data_count = len(test_data)
 
     def test(self):
-        t1 = t2 = t3 = 0
+        t1 = 0
+        t2 = 0
+        t3 = 0
         for t in range(self.data_count):
             vec = np.array(self.test_data[t]).astype(float)
             t1 += self.testPerceptrom(self.test_label[t], vec)
