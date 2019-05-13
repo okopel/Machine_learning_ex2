@@ -65,7 +65,7 @@ def main():
     # X = Z_normalize(X)
     # normalize all the args to args between 0 to 1
     X = MinMax_normalize(X)
-    # print(X, Y)
+    X, Y = perceptron.shuffle2np(X, Y)
     perceptronVec = perceptron.perceptron(X, Y)
     svmVec = svm.svm(X, Y)
     paVec = Passive_Aggressive.pa(X, Y)

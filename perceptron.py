@@ -20,10 +20,10 @@ def perceptron(X_train: np, Y_train: np) -> object:
     # <<Perceptron>>
     # multi class
     # num of iterations
-    epochs = 20
+    epochs = 2000
     for e in range(epochs):
         # take one random example from the training set
-        X_train, Y_train = shuffle(X_train, Y_train)
+        X_train, Y_train = shuffle2np(X_train, Y_train)
         # x= out example while y is the class
     for x, y in zip(X_train, Y_train):
         x = x.astype(np.float)
@@ -42,3 +42,11 @@ def perceptron(X_train: np, Y_train: np) -> object:
             # w[y_hat, :] -= eta * x
             w[int(y_hat)] -= etax
     return w
+
+
+def shuffle2np(x, y):
+    ret = np.c_[x, y]
+    ret = shuffle(ret)
+    x = ret[:, :-1]
+    y = ret[:, -1]
+    return x, y
