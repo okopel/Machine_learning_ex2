@@ -55,7 +55,7 @@ class Training:
 
 def shuffle2np(x, y):  # todo is it work?
     ret = np.c_[x, y]
-    ret = np.random.mtrand.shuffle(ret)
+    np.random.shuffle(ret)
     x = ret[:, :-1]
     y = ret[:, -1]
     return x, y
