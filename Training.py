@@ -23,6 +23,7 @@ class Training:
             self.t_data, self.t_label = shuffle2np(self.t_data, self.t_label)
             for x, y in zip(self.t_data, self.t_label):
                 y = int(y)
+                x = np.array(x)
                 self.perceptron(x, y)
                 self.passiveAgressive(x, y)
                 self.svm(x, y)
@@ -31,7 +32,7 @@ class Training:
     def perceptron(self, x, y):
         y_hat = int(np.argmax(np.dot(self.w_perceptron, x)))
         if y != y_hat:
-            etax = self.eta * np.array(x)
+            etax = self.eta * x
             self.w_perceptron[y] += etax
             self.w_perceptron[y_hat] -= etax
 
