@@ -17,8 +17,6 @@ class Utils:
         self.data_train = np.genfromtxt(self.data_train, delimiter=',', dtype="|U5")
         self.data_label = np.genfromtxt(self.data_label, delimiter=",")
         self.test_data = np.genfromtxt(self.test_data, delimiter=",", dtype="|U5")
-        if self.test_label is not None:
-            self.test_label = np.genfromtxt(self.test_label, delimiter=',')
 
         self.data_train = self.one_hot(self.data_train, ['M', 'F', 'I'])
         self.test_data = self.one_hot(self.test_data, ['M', 'F', 'I'])
