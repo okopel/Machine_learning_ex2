@@ -19,8 +19,8 @@ if __name__ == '__main__':
     test_data = sys.argv[3]
     clssesNum = 3
     lamda = 0.2
-    eta = 0.25
-    epochs = 10
+    eta = 0.4
+    epochs = 100
     data_train, data_label, test_data = Utils.Utils(data_t, data_label, test_data).orderData()
     w_per, w_pa, w_svm = Training.Training(data_train, data_label, clssesNum, lamda, eta, epochs).train()
     tester = Testing.Testing(test_data, w_per, w_pa, w_svm)

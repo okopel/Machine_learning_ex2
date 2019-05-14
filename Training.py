@@ -40,8 +40,9 @@ class Training:
     def passiveAgressive(self, x, y):
         y_hat = int(np.argmax(np.dot(self.w_pa, x)))
         if y != y_hat:
-            t = (max(0, 1 - (np.dot(self.w_pa[int(y)], x)) + (np.dot(self.w_pa[int(y_hat)], x)))) / (
-                    np.linalg.norm(x) ** 2)
+            c = max(0, (1 - (np.dot(self.w_pa[int(y)], x)) + (np.dot(self.w_pa[int(y_hat)], x))))
+            d = 2 * (np.linalg.norm(x) ** 2)
+            t = c / d
             tx = t * x
             self.w_pa[y] += tx
             self.w_pa[y_hat] -= tx
