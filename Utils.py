@@ -7,7 +7,7 @@ from scipy import stats
 
 
 class Utils:
-    def __init__(self, data_t, data_label, test_data, test_label):
+    def __init__(self, data_t, data_label, test_data, test_label=None):
         self.data_train = data_t
         self.data_label = data_label
         self.test_data = test_data
@@ -17,14 +17,16 @@ class Utils:
         self.data_train = np.genfromtxt(self.data_train, delimiter=',', dtype="|U5")
         self.data_label = np.genfromtxt(self.data_label, delimiter=",")
         self.test_data = np.genfromtxt(self.test_data, delimiter=",", dtype="|U5")
-        self.test_label = np.genfromtxt(self.test_label, delimiter=',')
+        if self.test_label is not None:
+            self.test_label = np.genfromtxt(self.test_label, delimiter=',')
 
         self.data_train = self.one_hot(self.data_train, ['M', 'F', 'I'])
         self.test_data = self.one_hot(self.test_data, ['M', 'F', 'I'])
 
         self.data_train = self.MinMax_normalize(self.data_train)
         self.test_data = self.MinMax_normalize(self.test_data)
-
+        if self.test_label is None:
+            return self.data_train, self.data_label, self.test_data
         return self.data_train, self.data_label, self.test_data, self.test_label
 
     # todo!
@@ -38,10 +40,12 @@ class Utils:
         for i in range(len(arrOfParams[0])):
             minArg = float(min(arrOfParams[:, i]))
             maxArg = float(max(arrOfParams[:, i]))
-            if minArg == maxArg:  # todo
-                return 1
+
             for j in range(len(arrOfParams)):
-                arrOfParams[j, i] = (float(arrOfParams[j, i]) - minArg) / (maxArg - minArg)
+                if minArg == maxArg:  # todo
+                    arrOfParams[j, i] = 0
+                else:
+                    arrOfParams[j, i] = (float(arrOfParams[j, i]) - minArg) / (maxArg - minArg)
             return arrOfParams
 
     # take one box with char/type args and separate it to bits
