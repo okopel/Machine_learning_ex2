@@ -21,13 +21,11 @@ if __name__ == '__main__':
     lamda = 0.2
     eta = 0.25
     epochs = 10
-    tool = Utils.Utils(data_t, data_label, test_data)
-    data_train, data_label, test_data = tool.orderData()
-    trainer = Training.Training(data_train, data_label, clssesNum, lamda, eta, epochs)
-    w_per, w_pa, w_svm = trainer.train()
+    data_train, data_label, test_data = Utils.Utils(data_t, data_label, test_data).orderData()
+    w_per, w_pa, w_svm = Training.Training(data_train, data_label, clssesNum, lamda, eta, epochs).train()
     tester = Testing.Testing(test_data, w_per, w_pa, w_svm)
-    if len(sys.argv) == 5:
+    if len(sys.argv) == 5:  # debug mode
         t1, t2, t3 = tester.testStatistic(np.genfromtxt(sys.argv[4], delimiter=','))
         print("succeeds rate: per:", t1, " pa:", t2, " svm:", t3)
-    else:
+    else:  # testing mode
         tester.test()
