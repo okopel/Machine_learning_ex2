@@ -20,9 +20,13 @@ class Testing:
         t3 = 0
         for t in range(self.data_count):
             vec = np.array(self.test_data[t]).astype(float)
-            t1 += self.testPerceptrom(self.test_label[t], vec)
-            t2 += self.testPA(self.test_label[t], vec)
-            t3 += self.testSVM(self.test_label[t], vec)
+            a1 = self.testPerceptrom(self.test_label[t], vec)
+            a2 = self.testPA(self.test_label[t], vec)
+            a3 = self.testSVM(self.test_label[t], vec)
+            t1 += a1
+            t2 += a2
+            t3 += a3
+            print("perseptron: {}, svm: {}, pa: {}".format(a1, a3, a2))
         t1 /= self.data_count
         t2 /= self.data_count
         t3 /= self.data_count

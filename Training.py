@@ -26,7 +26,7 @@ class Training:
                 t1 = self.perceptron(x, y)
                 t2 = self.passiveAgressive(x, y)
                 t3 = self.svm(x, y)
-                print("real:", y, " per:", t1, " pa:", t2, " svm:", t3)
+                # print("real:", y, " per:", t1, " pa:", t2, " svm:", t3)
         return self.w_perceptron, self.w_pa, self.w_svm
 
     def perceptron(self, x, y):

@@ -11,7 +11,7 @@ import Utils
 
 def main():
     # get the parameter from CMD
-    if len(sys.argv) < 4:
+    if len(sys.argv) < 3:
         print("ERROR!!")
         return
     data_t = sys.argv[1]
@@ -28,7 +28,7 @@ def main():
     w_per, w_pa, w_svm = trainer.train()
     tester = Testing.Testing(test_data, test_label, w_per, w_pa, w_svm)
     t1, t2, t3 = tester.test()
-    print("succeeds rate: per:", t1, " pa:", t2, " svm:", t3)
+    # print("succeeds rate: per:", t1, " pa:", t2, " svm:", t3)
 
 
 main()
