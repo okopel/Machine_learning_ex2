@@ -62,9 +62,10 @@ class Training:
                     self.w_svm[y_hat] -= etax
                 else:
                     self.w_svm[i] *= etaLamda
-        # else:
-        #    for i in range(len(self.w_svm)):
-        #       self.w_svm[i] *= etaLamda
+        else:
+            for i in range(len(self.w_svm)):
+                if i != y:
+                    self.w_svm[i] *= etaLamda
         return y_hat
 
     def shuffle2np(self, x, y):  # todo is it work?
