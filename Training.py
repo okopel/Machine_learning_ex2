@@ -19,7 +19,7 @@ class Training:
 
     def train(self):
         for e in range(self.epochs):
-            self.t_data, self.t_label = self.shuffle2np(self.t_data, self.t_label)
+            # self.t_data, self.t_label = self.shuffle2np(self.t_data, self.t_label)
             for x, y in zip(self.t_data, self.t_label):
                 y = int(float(y))
                 x = np.array(x).astype(float)
@@ -50,8 +50,8 @@ class Training:
 
     def svm(self, x, y):
         y_hat = int(np.argmax(np.dot(self.w_svm, x)))
+        etaLamda = 1 - self.eta * self.lamda
         if y != y_hat:
-            etaLamda = 1 - self.eta * self.lamda
             etax = self.eta * x
             for i in range(len(self.w_svm)):
                 if i == y:
@@ -62,6 +62,9 @@ class Training:
                     self.w_svm[y_hat] -= etax
                 else:
                     self.w_svm[i] *= etaLamda
+        # else:
+        #    for i in range(len(self.w_svm)):
+        #       self.w_svm[i] *= etaLamda
         return y_hat
 
     def shuffle2np(self, x, y):  # todo is it work?
