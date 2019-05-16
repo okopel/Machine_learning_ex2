@@ -36,7 +36,7 @@ if __name__ == '__main__':
     testArgs = [10, 50, 100, 200, 300, 400, 500, 600, 700]
     for e in testArgs:
         epochs = e
-        for i in range(0, 1):
+        for i in range(1):
             iteration.append(i)
             w_per, w_pa, w_svm = Training.Training(data_train, data_label, clssesNum, lamda, etaPer, etaSvm,
                                                    epochs).train(
