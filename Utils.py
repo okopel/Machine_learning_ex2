@@ -44,7 +44,7 @@ class Utils:
                     arrOfParams[j, i] = 0
                 else:
                     arrOfParams[j, i] = (float(arrOfParams[j, i]) - minArg) / (maxArg - minArg)
-            return arrOfParams
+        return arrOfParams
 
     # take one box with char/type args and separate it to bits
     # when the index of this char in arrOfypes is 1 and the other is 0

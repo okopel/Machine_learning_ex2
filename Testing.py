@@ -42,16 +42,19 @@ class Testing:
         y_hat = np.argmax(np.dot(self.w_per, vec))
         if y == y_hat:
             return 1
-        return 0
+        else:
+            return 0
 
     def testPA(self, y, vec):
         y_hat = np.argmax(np.dot(self.w_pa, vec))
         if y == y_hat:
             return 1
-        return 0
+        else:
+            return 0
 
     def testSVM(self, y, vec):
         y_hat = np.argmax(np.dot(self.w_svm, vec))
         if y == y_hat:
             return 1
-        return 0
+        else:
+            return 0

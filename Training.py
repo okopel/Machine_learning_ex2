@@ -7,17 +7,19 @@ import numpy as np
 
 
 class Training:
-    def __init__(self, t_data, t_label, clssesNum, lamda, eta=0.25, epochs=50):
+    def __init__(self, t_data, t_label, clssesNum, lamda, etaPer, etaSVM, epochs=50):
         self.t_data = t_data  # data of training set
         self.t_label = t_label  # label of training set
         self.lamda = lamda
-        self.eta = eta
+        self.etaPer = etaPer
+        self.etaSVM = etaSVM
         self.epochs = epochs  # how many iterates
         self.w_perceptron = np.zeros((clssesNum, len(t_data[0])))
         self.w_pa = np.zeros((clssesNum, len(t_data[0])))
         self.w_svm = np.zeros((clssesNum, len(t_data[0])))
 
     def train(self):
+        # self.t_data, self.t_label = self.shuffle2np(self.t_data, self.t_label)
         for e in range(self.epochs):
             # self.t_data, self.t_label = self.shuffle2np(self.t_data, self.t_label)
             for x, y in zip(self.t_data, self.t_label):
@@ -26,13 +28,13 @@ class Training:
                 t1 = self.perceptron(x, y)
                 t2 = self.passiveAgressive(x, y)
                 t3 = self.svm(x, y)
-                # print("real:", y, " per:", t1, " pa:", t2, " svm:", t3)
+            # print("real:", y, " per:", t1, " pa:", t2, " svm:", t3)
         return self.w_perceptron, self.w_pa, self.w_svm
 
     def perceptron(self, x, y):
         y_hat = int(np.argmax(np.dot(self.w_perceptron, x)))
         if y != y_hat:
-            etax = self.eta * x
+            etax = self.etaPer * x
             self.w_perceptron[y] += etax
             self.w_perceptron[y_hat] -= etax
         return y_hat
@@ -50,9 +52,9 @@ class Training:
 
     def svm(self, x, y):
         y_hat = int(np.argmax(np.dot(self.w_svm, x)))
-        etaLamda = 1 - self.eta * self.lamda
+        etaLamda = 1 - self.etaSVM * self.lamda
         if y != y_hat:
-            etax = self.eta * x
+            etax = self.etaSVM * x
             for i in range(len(self.w_svm)):
                 if i == y:
                     self.w_svm[y] *= etaLamda
@@ -61,7 +63,7 @@ class Training:
                     self.w_svm[y_hat] *= etaLamda
                     self.w_svm[y_hat] -= etax
                 else:
-                    self.w_svm[i] *= etaLamda
+                    self.w_svm[i] *= (etaLamda)
         else:
             for i in range(len(self.w_svm)):
                 if i != y:
