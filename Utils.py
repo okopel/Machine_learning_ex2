@@ -7,25 +7,23 @@ from scipy import stats
 
 
 class Utils:
-    def __init__(self, data_t, data_label, test_data, test_label=None):
+    def __init__(self, data_t, data_label, test_data):
         self.data_train = data_t
         self.data_label = data_label
         self.test_data = test_data
-        self.test_label = test_label
 
     def orderData(self):
         self.data_train = np.genfromtxt(self.data_train, delimiter=',', dtype="|U5")
-        self.data_label = np.genfromtxt(self.data_label, delimiter=",")
-        self.test_data = np.genfromtxt(self.test_data, delimiter=",", dtype="|U5")
-
+        self.data_label = np.genfromtxt(self.data_label, delimiter=",", dtype='>i4')
         self.data_train = self.one_hot(self.data_train, ['M', 'F', 'I'])
-        self.test_data = self.one_hot(self.test_data, ['M', 'F', 'I'])
-
         self.data_train = self.MinMax_normalize(self.data_train)
-        self.test_data = self.MinMax_normalize(self.test_data)
-        if self.test_label is None:
-            return self.data_train, self.data_label, self.test_data
-        return self.data_train, self.data_label, self.test_data, self.test_label
+
+        if self.test_data is not None:
+            self.test_data = np.genfromtxt(self.test_data, delimiter=",", dtype="|U5")
+            self.test_data = self.one_hot(self.test_data, ['M', 'F', 'I'])
+            self.test_data = self.MinMax_normalize(self.test_data)
+
+        return self.data_train, self.data_label, self.test_data
 
     # todo!
     @staticmethod
@@ -61,5 +59,5 @@ class Utils:
                     # delete the original sign
                     arrOfData[i][colToAdd] = float(0)
                     # light the true bit
-                    arrOfData[i][j] = float(1)
+                    arrOfData[i][j] = float(1 / len(arrOfData))  # todo change to 1/3?
         return arrOfData

@@ -18,17 +18,20 @@ class Training:
         self.w_pa = np.zeros((clssesNum, len(t_data[0])))
         self.w_svm = np.zeros((clssesNum, len(t_data[0])))
 
-    def train(self):
+    def train(self, index):
         # self.t_data, self.t_label = self.shuffle2np(self.t_data, self.t_label)
         for e in range(self.epochs):
             # self.t_data, self.t_label = self.shuffle2np(self.t_data, self.t_label)
+            i = -1
             for x, y in zip(self.t_data, self.t_label):
+                i += 1
+                if i % 5 == index:  # this part saves to testing
+                    continue
                 y = int(float(y))
                 x = np.array(x).astype(float)
-                t1 = self.perceptron(x, y)
-                t2 = self.passiveAgressive(x, y)
-                t3 = self.svm(x, y)
-            # print("real:", y, " per:", t1, " pa:", t2, " svm:", t3)
+                self.perceptron(x, y)
+                self.passiveAgressive(x, y)
+                self.svm(x, y)
         return self.w_perceptron, self.w_pa, self.w_svm
 
     def perceptron(self, x, y):
@@ -44,6 +47,8 @@ class Training:
         if y != y_hat:
             c = max(0, (1 - (np.dot(self.w_pa[int(y)], x)) + (np.dot(self.w_pa[int(y_hat)], x))))
             d = 2 * (np.linalg.norm(x) ** 2)
+            if d == 0:
+                d = 1
             t = c / d
             tx = t * x
             self.w_pa[y] += tx
