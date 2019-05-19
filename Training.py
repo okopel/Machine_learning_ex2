@@ -7,20 +7,41 @@ import numpy as np
 
 
 class Training:
-    def __init__(self, t_data, t_label, clssesNum, lamda, etaPer, etaSVM, epochs=50):
+    def __init__(self, t_data, t_label, clssesNum, lamda, etaPer, etaSVM, epochsPA, epochsSVM, epochPER):
         self.t_data = t_data  # data of training set
         self.t_label = t_label  # label of training set
         self.lamda = lamda
         self.etaPer = etaPer
         self.etaSVM = etaSVM
-        self.epochs = epochs  # how many iterates
+        self.epochsOfPA = epochsPA
+        self.epochsOfSVM = epochsSVM
+        self.epochsOfPER = epochPER
         self.w_perceptron = np.zeros((clssesNum, len(t_data[0])))
         self.w_pa = np.zeros((clssesNum, len(t_data[0])))
         self.w_svm = np.zeros((clssesNum, len(t_data[0])))
 
     def train(self, index):
         # self.t_data, self.t_label = self.shuffle2np(self.t_data, self.t_label)
-        for e in range(self.epochs):
+        for e in range(max(self.epochsOfSVM, self.epochsOfPER, self.epochsOfPA)):
+            # self.t_data, self.t_label = self.shuffle2np(self.t_data, self.t_label)
+            i = -1
+            for x, y in zip(self.t_data, self.t_label):
+                i += 1
+                if i % 5 == index:  # this part saves to testing
+                    continue
+                y = int(float(y))
+                x = np.array(x).astype(float)
+                if e < self.epochsOfPER:
+                    self.perceptron(x, y)
+                if e < self.epochsOfPA:
+                    self.passiveAgressive(x, y)
+                if e < self.epochsOfSVM:
+                    self.svm(x, y)
+        return self.w_perceptron, self.w_pa, self.w_svm
+
+    def trainPer(self, index):
+        # self.t_data, self.t_label = self.shuffle2np(self.t_data, self.t_label)
+        for e in range(self.epochsOfPER):
             # self.t_data, self.t_label = self.shuffle2np(self.t_data, self.t_label)
             i = -1
             for x, y in zip(self.t_data, self.t_label):
@@ -30,9 +51,24 @@ class Training:
                 y = int(float(y))
                 x = np.array(x).astype(float)
                 self.perceptron(x, y)
-                self.passiveAgressive(x, y)
-                self.svm(x, y)
-        return self.w_perceptron, self.w_pa, self.w_svm
+        return self.w_perceptron
+
+    def trainPaAndSvm(self, index):
+        # self.t_data, self.t_label = self.shuffle2np(self.t_data, self.t_label)
+        for e in range(max(self.epochsOfSVM, self.epochsOfPA)):
+            # self.t_data, self.t_label = self.shuffle2np(self.t_data, self.t_label)
+            i = -1
+            for x, y in zip(self.t_data, self.t_label):
+                i += 1
+                if i % 5 == index:  # this part saves to testing
+                    continue
+                y = int(float(y))
+                x = np.array(x).astype(float)
+                if e < self.epochsOfPA:
+                    self.passiveAgressive(x, y)
+                if e < self.epochsOfSVM:
+                    self.svm(x, y)
+        return self.w_pa, self.w_svm
 
     def perceptron(self, x, y):
         y_hat = int(np.argmax(np.dot(self.w_perceptron, x)))
@@ -68,7 +104,7 @@ class Training:
                     self.w_svm[y_hat] *= etaLamda
                     self.w_svm[y_hat] -= etax
                 else:
-                    self.w_svm[i] *= (etaLamda)
+                    self.w_svm[i] *= etaLamda
         else:
             for i in range(len(self.w_svm)):
                 if i != y:

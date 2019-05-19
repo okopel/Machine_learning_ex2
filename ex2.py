@@ -24,23 +24,31 @@ if __name__ == '__main__':
     lamda = 0.15
     etaPer = 0.01
     etaSvm = 0.2  # 0.05
-    epochs = 70
+    epochsPA = 80
+    epochsSVM = 3
+    epochPER = 180
     succRateinPA = []
     succRateinSVM = []
     succRateinPER = []
     plt.ylabel("Success rate")
-    plt.xlabel("epochs arg")
+    plt.xlabel("type")
     plt.title("success rate")
-    data_train, data_label, test_data = Utils.Utils(data_train, data_label, test_data).orderData()
     iteration = []
-    testArgs = [10, 50, 100, 200, 300, 400, 500, 600, 700]
-    for e in testArgs:
-        epochs = e
-        for i in range(1):
+    dt = data_train
+    dl = data_label
+    ts = test_data
+    dt2 = data_train
+    dl2 = data_label
+    ts2 = test_data
+    testArgs = [0, 1, 2, 3, 4]
+    for i in testArgs:
+        data_train, data_label, test_data = Utils.Utils(dt, dl, ts).orderData(3)
+        i = int(i)
+        for e in range(1):
             iteration.append(i)
             w_per, w_pa, w_svm = Training.Training(data_train, data_label, clssesNum, lamda, etaPer, etaSvm,
-                                                   epochs).train(
-                i)
+                                                   epochsPA, epochsSVM, epochPER).train(i)
+
             tester = Testing.Testing(data_train, data_label, w_per, w_pa, w_svm)
             if len(sys.argv) == 3:  # debug mode
                 t1, t2, t3 = tester.testStatistic(i)

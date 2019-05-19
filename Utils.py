@@ -12,23 +12,38 @@ class Utils:
         self.data_label = data_label
         self.test_data = test_data
 
-    def orderData(self):
+    def orderData(self, typeOfNormal):
         self.data_train = np.genfromtxt(self.data_train, delimiter=',', dtype="|U5")
         self.data_label = np.genfromtxt(self.data_label, delimiter=",", dtype='>i4')
         self.data_train = self.one_hot(self.data_train, ['M', 'F', 'I'])
-        self.data_train = self.MinMax_normalize(self.data_train)
+        self.data_train = self.Z_normalize(self.data_train, typeOfNormal)
+        # self.data_train = self.MinMax_normalize(self.data_train)
 
         if self.test_data is not None:
             self.test_data = np.genfromtxt(self.test_data, delimiter=",", dtype="|U5")
             self.test_data = self.one_hot(self.test_data, ['M', 'F', 'I'])
-            self.test_data = self.MinMax_normalize(self.test_data)
-
+            self.test_data = self.Z_normalize(self.test_data, typeOfNormal)
+            # self.test_data = self.MinMax_normalize(self.test_data)
         return self.data_train, self.data_label, self.test_data
 
-    # todo!
     @staticmethod
-    def Z_normalize(arrOfParams):
-        return stats.zscore(arrOfParams)
+    def Z_normalize(arrOfParams, type):
+        if type == 0:
+            return stats.zscore(arrOfParams.astype(float))
+        if type == 1:
+            return stats.zscore(arrOfParams.astype(float), ddof=1)
+        if type == 2:
+            return stats.zscore(arrOfParams.astype(float), axis=1)
+        if type == 3:
+            return stats.zscore(arrOfParams.astype(float), ddof=1, axis=1)
+        if type == 4:
+            return stats.mstats.zscore(arrOfParams.astype(float))
+        if type == 5:
+            return stats.mstats.zscore(arrOfParams.astype(float), ddof=1)
+        if type == 6:
+            return stats.mstats.zscore(arrOfParams.astype(float), ddof=1, axis=1)
+        if type == 7:
+            return stats.mstats.zscore(arrOfParams.astype(float), axis=1)
 
     @staticmethod
     def MinMax_normalize(arrOfParams):
@@ -38,7 +53,7 @@ class Utils:
             maxArg = float(max(arrOfParams[:, i]))
 
             for j in range(len(arrOfParams)):
-                if minArg == maxArg:  # todo
+                if minArg == maxArg:
                     arrOfParams[j, i] = 0
                 else:
                     arrOfParams[j, i] = (float(arrOfParams[j, i]) - minArg) / (maxArg - minArg)
