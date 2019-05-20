@@ -14,6 +14,15 @@ class Testing:
         self.w_svm = w_svm
         self.data_count = len(test_data)
 
+    def getWPA(self):
+        return self.w_pa
+
+    def getWPER(self):
+        return self.w_per
+
+    def getWSVM(self):
+        return self.w_svm
+
     def test(self, test):
         for t in range(len(test)):
             vec = np.array(test[t]).astype(float)
@@ -57,3 +66,34 @@ class Testing:
             return 1
         else:
             return 0
+
+    @staticmethod
+    def testerSubmit(tester, test):
+        for t in range(len(test)):
+            vec = np.array(test[t]).astype(float)
+            pa = np.zeros(3)
+            svm = np.zeros(3)
+            per = np.zeros(3)
+            for i in range(5):
+                paRes = np.argmax(np.dot(tester[i].getWPA(), vec))
+                if paRes == 0:
+                    pa[0] += 1
+                elif paRes == 1:
+                    pa[1] += 1
+                elif paRes == 2:
+                    pa[2] += 1
+                svmRes = np.argmax(np.dot(tester[i].getWSVM(), vec))
+                if svmRes == 0:
+                    svm[0] += 1
+                elif svmRes == 1:
+                    svm[1] += 1
+                elif svmRes == 2:
+                    svm[2] += 1
+                perRes = np.argmax(np.dot(tester[i].getWPER(), vec))
+                if perRes == 0:
+                    per[0] += 1
+                elif perRes == 1:
+                    per[1] += 1
+                elif perRes == 2:
+                    per[2] += 1
+            print("perceptron: {}, svm: {}, pa: {}".format(np.argmax(per), np.argmax(svm), np.argmax(pa)))

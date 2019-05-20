@@ -28,7 +28,6 @@ if __name__ == '__main__':
         "epochsSVM": 3,
         "epochPER": 180
     }
-
     succRateinPA = []
     succRateinSVM = []
     succRateinPER = []
@@ -37,28 +36,34 @@ if __name__ == '__main__':
     plt.title("Report")
     iteration = []
     dt, dl, td = Utils.Utils(dt, dl, td).orderData(3)
-    testArgs = range(5)
+    seper = 5
+    testArgs = range(seper)
+    w_per = [[], [], [], [], []]
+    w_pa = [[], [], [], [], []]
+    w_svm = [[], [], [], [], []]
+    tester = [Training, Training, Training, Training, Training]
     for tr in [0]:
         for i in testArgs:
             i = int(i)
             iteration.append(i)
-            w_per, w_pa, w_svm = Training.Training(dt, dl, params).train(i)
-
-            tester = Testing.Testing(dt, dl, w_per, w_pa, w_svm)
+            w_per[i], w_pa[i], w_svm[i] = Training.Training(dt, dl, params).train(i)
+            tester[i] = Testing.Testing(dt, dl, w_per[i], w_pa[i], w_svm[i])
             if len(sys.argv) == 3:  # debug mode
-                t1, t2, t3 = tester.testStatistic(i)
+                t1, t2, t3 = tester[i].testStatistic(i)
                 succRateinPER.append(t1)
                 succRateinPA.append(t2)
                 succRateinSVM.append(t3)
                 print("succeeds rate: per:", t1, " pa:", t2, " svm:", t3)
-            else:  # testing mode
-                tester.test(td)
 
+    if len(sys.argv) > 3:  # debug mode
+        Testing.Testing.testerSubmit(tester, td)
+        # tester.test(td)
+    else:
         plt.plot(testArgs, succRateinSVM, label="SVM {}".format(tr))
         succRateinSVM = []
         plt.plot(testArgs, succRateinPA, label="PA {} ".format(tr))
         succRateinPA = []
         plt.plot(testArgs, succRateinPER, label="Perceptron {}".format(tr))
         succRateinPER = []
-    plt.legend()
-    plt.show()
+        plt.legend()
+        plt.show()
