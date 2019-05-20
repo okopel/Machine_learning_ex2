@@ -38,23 +38,27 @@ if __name__ == '__main__':
     iteration = []
     dt, dl, td = Utils.Utils(dt, dl, td).orderData(3)
     testArgs = range(5)
-    for i in testArgs:
-        i = int(i)
-        iteration.append(i)
-        w_per, w_pa, w_svm = Training.Training(dt, dl, params).train(i)
+    for tr in [0]:
+        for i in testArgs:
+            i = int(i)
+            iteration.append(i)
+            w_per, w_pa, w_svm = Training.Training(dt, dl, params).train(i)
 
-        tester = Testing.Testing(dt, dl, w_per, w_pa, w_svm)
-        if len(sys.argv) == 3:  # debug mode
-            t1, t2, t3 = tester.testStatistic(i)
-            succRateinPER.append(t1)
-            succRateinPA.append(t2)
-            succRateinSVM.append(t3)
-            print("succeeds rate: per:", t1, " pa:", t2, " svm:", t3)
-        else:  # testing mode
-            tester.test(td)
+            tester = Testing.Testing(dt, dl, w_per, w_pa, w_svm)
+            if len(sys.argv) == 3:  # debug mode
+                t1, t2, t3 = tester.testStatistic(i)
+                succRateinPER.append(t1)
+                succRateinPA.append(t2)
+                succRateinSVM.append(t3)
+                print("succeeds rate: per:", t1, " pa:", t2, " svm:", t3)
+            else:  # testing mode
+                tester.test(td)
 
-    plt.plot(testArgs, succRateinSVM, label="SVM")
-    plt.plot(testArgs, succRateinPA, label="PA")
-    plt.plot(testArgs, succRateinPER, label="Perceptron")
+        # plt.plot(testArgs, succRateinSVM, label="SVM shuffle={}".format(tr))
+        succRateinSVM = []
+        # plt.plot(testArgs, succRateinPA, label="PA shuffle={}".format(tr))
+        succRateinPA = []
+        plt.plot(testArgs, succRateinPER, label="Perceptron shuffle={}".format(tr))
+        succRateinPER = []
     plt.legend()
     plt.show()
