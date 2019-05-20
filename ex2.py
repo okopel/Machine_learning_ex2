@@ -55,7 +55,7 @@ if __name__ == '__main__':
                 succRateinSVM.append(t3)
                 print("succeeds rate: per:", t1, " pa:", t2, " svm:", t3)
 
-    if len(sys.argv) > 3:  # debug mode
+    if len(sys.argv) > 3:  # submit mode
         Testing.Testing.testerSubmit(tester, td)
         # tester.test(td)
     else:
