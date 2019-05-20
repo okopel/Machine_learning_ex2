@@ -7,18 +7,20 @@ import numpy as np
 
 
 class Training:
-    def __init__(self, t_data, t_label, clssesNum, lamda, etaPer, etaSVM, epochsPA, epochsSVM, epochPER):
+    def __init__(self, t_data, t_label, params):  # clssesNum, lamda, etaPer, etaSVM, epochsPA, epochsSVM, epochPER):
         self.t_data = t_data  # data of training set
         self.t_label = t_label  # label of training set
-        self.lamda = lamda
-        self.etaPer = etaPer
-        self.etaSVM = etaSVM
-        self.epochsOfPA = epochsPA
-        self.epochsOfSVM = epochsSVM
-        self.epochsOfPER = epochPER
-        self.w_perceptron = np.zeros((clssesNum, len(t_data[0])))
-        self.w_pa = np.zeros((clssesNum, len(t_data[0])))
-        self.w_svm = np.zeros((clssesNum, len(t_data[0])))
+        self.lamda = params["lamda"]
+        self.etaPer = params["etaPer"]
+        self.etaSVM = params["etaSvm"]
+        self.epochsOfPA = params["epochsPA"]
+        self.epochsOfSVM = params["epochsSVM"]
+        self.epochsOfPER = params["epochPER"]
+        clssesNum = params["clssesNum"]
+        ltd = len(t_data[0])
+        self.w_perceptron = np.zeros((clssesNum, ltd))
+        self.w_pa = np.zeros((clssesNum, ltd))
+        self.w_svm = np.zeros((clssesNum, ltd))
 
     def train(self, index):
         # self.t_data, self.t_label = self.shuffle2np(self.t_data, self.t_label)
@@ -111,7 +113,7 @@ class Training:
                     self.w_svm[i] *= etaLamda
         return y_hat
 
-    def shuffle2np(self, x, y):  # todo is it work?
+    def shuffle2np(self, x, y):
         ret = np.c_[x, y]
         np.random.shuffle(ret)
         x = ret[:, :-1]

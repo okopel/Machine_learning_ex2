@@ -14,50 +14,44 @@ if __name__ == '__main__':
     # get the parameter from CMD
     if len(sys.argv) < 3:
         print("ERROR!!")
-    data_train = sys.argv[1]
-    data_label = sys.argv[2]
-    test_data = None
+    dt = sys.argv[1]  # data_train
+    dl = sys.argv[2]  # data label
+    td = None  # test data
     if len(sys.argv) == 4:
-        test_data = sys.argv[3]
+        td = sys.argv[3]
+    params = {
+        "clssesNum": 3,
+        "lamda": 0.15,
+        "etaPer": 0.01,
+        "etaSvm": 0.2,  # 0.05
+        "epochsPA": 80,
+        "epochsSVM": 3,
+        "epochPER": 180
+    }
 
-    clssesNum = 3
-    lamda = 0.15
-    etaPer = 0.01
-    etaSvm = 0.2  # 0.05
-    epochsPA = 80
-    epochsSVM = 3
-    epochPER = 180
     succRateinPA = []
     succRateinSVM = []
     succRateinPER = []
     plt.ylabel("Success rate")
     plt.xlabel("type")
-    plt.title("success rate")
+    plt.title("Report")
     iteration = []
-    dt = data_train
-    dl = data_label
-    ts = test_data
-    dt2 = data_train
-    dl2 = data_label
-    ts2 = test_data
-    testArgs = [0, 1, 2, 3, 4]
+    dt, dl, td = Utils.Utils(dt, dl, td).orderData(3)
+    testArgs = range(5)
     for i in testArgs:
-        data_train, data_label, test_data = Utils.Utils(dt, dl, ts).orderData(3)
         i = int(i)
-        for e in range(1):
-            iteration.append(i)
-            w_per, w_pa, w_svm = Training.Training(data_train, data_label, clssesNum, lamda, etaPer, etaSvm,
-                                                   epochsPA, epochsSVM, epochPER).train(i)
+        iteration.append(i)
+        w_per, w_pa, w_svm = Training.Training(dt, dl, params).train(i)
 
-            tester = Testing.Testing(data_train, data_label, w_per, w_pa, w_svm)
-            if len(sys.argv) == 3:  # debug mode
-                t1, t2, t3 = tester.testStatistic(i)
-                succRateinPER.append(t1)
-                succRateinPA.append(t2)
-                succRateinSVM.append(t3)
-                print("succeeds rate: per:", t1, " pa:", t2, " svm:", t3)
-            else:  # testing mode
-                tester.test(test_data)
+        tester = Testing.Testing(dt, dl, w_per, w_pa, w_svm)
+        if len(sys.argv) == 3:  # debug mode
+            t1, t2, t3 = tester.testStatistic(i)
+            succRateinPER.append(t1)
+            succRateinPA.append(t2)
+            succRateinSVM.append(t3)
+            print("succeeds rate: per:", t1, " pa:", t2, " svm:", t3)
+        else:  # testing mode
+            tester.test(td)
 
     plt.plot(testArgs, succRateinSVM, label="SVM")
     plt.plot(testArgs, succRateinPA, label="PA")

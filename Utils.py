@@ -7,24 +7,24 @@ from scipy import stats
 
 
 class Utils:
-    def __init__(self, data_t, data_label, test_data):
-        self.data_train = data_t
-        self.data_label = data_label
-        self.test_data = test_data
+    def __init__(self, dt, dl, td):
+        self.dt = dt
+        self.dl = dl
+        self.td = td
 
     def orderData(self, typeOfNormal):
-        self.data_train = np.genfromtxt(self.data_train, delimiter=',', dtype="|U5")
-        self.data_label = np.genfromtxt(self.data_label, delimiter=",", dtype='>i4')
-        self.data_train = self.one_hot(self.data_train, ['M', 'F', 'I'])
-        self.data_train = self.Z_normalize(self.data_train, typeOfNormal)
+        self.dt = np.genfromtxt(self.dt, delimiter=',', dtype="|U5")
+        self.dl = np.genfromtxt(self.dl, delimiter=",", dtype='>i4')
+        self.dt = self.one_hot(self.dt, ['M', 'F', 'I'])
+        self.dt = self.Z_normalize(self.dt, typeOfNormal)
         # self.data_train = self.MinMax_normalize(self.data_train)
 
-        if self.test_data is not None:
-            self.test_data = np.genfromtxt(self.test_data, delimiter=",", dtype="|U5")
-            self.test_data = self.one_hot(self.test_data, ['M', 'F', 'I'])
-            self.test_data = self.Z_normalize(self.test_data, typeOfNormal)
+        if self.td is not None:
+            self.td = np.genfromtxt(self.td, delimiter=",", dtype="|U5")
+            self.td = self.one_hot(self.td, ['M', 'F', 'I'])
+            self.td = self.Z_normalize(self.td, typeOfNormal)
             # self.test_data = self.MinMax_normalize(self.test_data)
-        return self.data_train, self.data_label, self.test_data
+        return self.dt, self.dl, self.td
 
     @staticmethod
     def Z_normalize(arrOfParams, type):
