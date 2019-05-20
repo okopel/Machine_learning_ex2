@@ -54,11 +54,11 @@ if __name__ == '__main__':
             else:  # testing mode
                 tester.test(td)
 
-        # plt.plot(testArgs, succRateinSVM, label="SVM shuffle={}".format(tr))
+        plt.plot(testArgs, succRateinSVM, label="SVM {}".format(tr))
         succRateinSVM = []
-        # plt.plot(testArgs, succRateinPA, label="PA shuffle={}".format(tr))
+        plt.plot(testArgs, succRateinPA, label="PA {} ".format(tr))
         succRateinPA = []
-        plt.plot(testArgs, succRateinPER, label="Perceptron shuffle={}".format(tr))
+        plt.plot(testArgs, succRateinPER, label="Perceptron {}".format(tr))
         succRateinPER = []
     plt.legend()
     plt.show()
